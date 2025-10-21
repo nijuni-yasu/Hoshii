@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Vercel用の設定（APIルートをサポート）
   images: {
     remotePatterns: [
       {

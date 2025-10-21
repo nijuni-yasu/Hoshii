@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "export": "next build",
+    "deploy": "next build && touch out/.nojekyll",
     "lint": "next lint",
     "test": "jest",
     "migrate": "node scripts/run-migration.js",
