@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
-type Item = { id:string; name:string; label:string; comment:string; created_at:string };
+type Item = { id?:string; name:string; label?:string; comment:string; created_at:string };
 
 const fetcher = (u:string)=>fetch(u).then(r=>r.json());
 
@@ -17,17 +17,25 @@ function bubbleColor(i:number){
   return palette[i % palette.length];
 }
 
-export default function FloatingComments(){
-  const { data } = useSWR<{items:Item[]}>("/api/leapday/comments?limit=40", fetcher, { refreshInterval: 6000 });
-  const items = data?.items ?? [];
+interface FloatingCommentsProps {
+  comments?: Item[];
+}
+
+export default function FloatingComments({ comments: externalComments }: FloatingCommentsProps = {}){
+  const { data } = useSWR<{items:Item[]}>(
+    externalComments ? null : "/api/leapday/comments?limit=40", 
+    fetcher, 
+    { refreshInterval: 6000 }
+  );
 
   // distribute bubbles into columns
-  const cols = 3;
   const columns = useMemo(()=>{
+    const items = externalComments ?? data?.items ?? [];
+    const cols = 3;
     const arr: Item[][] = Array.from({length:cols}, ()=>[]);
     items.forEach((it, i)=> arr[i%cols].push(it));
     return arr;
-  }, [items]);
+  }, [externalComments, data]);
 
   // slow drift baseline
   const [key,setKey] = useState(0);
@@ -40,7 +48,7 @@ export default function FloatingComments(){
           <div key={ci} className="relative space-y-3">
             {col.map((it, i)=>(
               <motion.div
-                key={it.id}
+                key={it.id ?? `${it.name}-${i}`}
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: (i%6)*0.08, type:"spring", stiffness: 220, damping: 24 }}
@@ -48,7 +56,7 @@ export default function FloatingComments(){
                 style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.06)" }}
               >
                 <div className="text-[11px] text-gray-500">{it.name} · {new Date(it.created_at).toLocaleString()}</div>
-                <div className="text-[12px] text-emerald-700 mb-1">「{it.label}」</div>
+                {it.label && <div className="text-[12px] text-emerald-700 mb-1">「{it.label}」</div>}
                 <div className="text-[14px] text-gray-800">{it.comment}</div>
               </motion.div>
             ))}
