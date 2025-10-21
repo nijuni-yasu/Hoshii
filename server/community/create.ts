@@ -1,5 +1,5 @@
 "use server";
-import { createClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabaseServer";
 
 interface CreateActionPayload {
   title: string;
@@ -12,7 +12,7 @@ interface CreateActionPayload {
 
 export async function createAction(payload: CreateActionPayload) {
   try {
-    const sb = createClient();
+    const sb = createServerClient();
     let communityId = payload.communityId ?? null;
     
     if (!communityId && payload.communityNameNew) {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabaseServer";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "actionId is required" }, { status: 400 });
     }
 
-    const supabase = createClient();
+    const supabase = createServerClient();
     const { data: action } = await supabase
       .from("actions")
       .select("id, stars_count")

@@ -1,5 +1,5 @@
 "use server";
-import { createClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabaseServer";
 
 interface FeedScope {
   scope: "personal" | "community";
@@ -7,7 +7,7 @@ interface FeedScope {
 
 export async function fetchFeed({ scope }: FeedScope) {
   try {
-    const supabase = createClient();
+    const supabase = createServerClient();
     
     // simple example: latest actions
     const { data } = await supabase
