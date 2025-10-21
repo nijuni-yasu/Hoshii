@@ -1,5 +1,6 @@
 import { createCanvas } from "canvas";
 import { createServerClient } from "@/lib/supabaseServer";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
@@ -46,8 +47,13 @@ export async function GET() {
       ctx.fill();
     }
     
-    return new Response(canvas.toBuffer("image/png"), {
-      headers: { "Content-Type": "image/png" }
+    const buffer = canvas.toBuffer("image/png");
+    // Buffer を Uint8Array として扱う
+    return new NextResponse(buffer as unknown as BodyInit, {
+      headers: { 
+        "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=60"
+      }
     });
   } catch (error) {
     console.error("Error in /api/leapday/sky:", error);

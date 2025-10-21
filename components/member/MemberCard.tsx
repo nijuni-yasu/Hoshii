@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface MemberCardProps {
@@ -31,12 +32,14 @@ export default function MemberCard({ member }: MemberCardProps) {
       <Link href={`/member/${member.slug}`} className="block">
         {/* Avatar and nickname */}
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--yk-accent)] to-[var(--yk-accent-2)] flex items-center justify-center text-white font-bold text-xl overflow-hidden shadow-lg">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--yk-accent)] to-[var(--yk-accent-2)] flex items-center justify-center text-white font-bold text-xl overflow-hidden shadow-lg relative">
             {member.avatar_url ? (
-              <img 
+              <Image 
                 src={member.avatar_url} 
                 alt={member.nickname}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="64px"
               />
             ) : (
               member.nickname.charAt(0)
