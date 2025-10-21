@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import DreamButton from "@/components/leapday/DreamButton";
 
 interface AvatarUploadProps {
   currentAvatar?: string;
@@ -72,11 +72,15 @@ export default function AvatarUpload({ currentAvatar, onUpload, disabled }: Avat
         onDragLeave={handleDragLeave}
       >
         {preview ? (
-          <img
-            src={preview}
-            alt="Avatar preview"
-            className="w-full h-full rounded-full object-cover"
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src={preview}
+              alt="Avatar preview"
+              fill
+              className="rounded-full object-cover"
+              unoptimized
+            />
+          </div>
         ) : (
           <div className="w-full h-full rounded-full bg-gradient-to-br from-[var(--yk-accent)] to-[var(--yk-accent-2)] flex items-center justify-center text-white">
             <div className="text-center">

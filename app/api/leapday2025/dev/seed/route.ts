@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabaseServer";
-import { leapday2025Members } from "@/data/leapday2025_members_seed";
+import { IBK7_MEMBERS_2025 } from "@/data/leapday2025_members_seed";
 
 export async function POST() {
   try {
@@ -9,7 +9,7 @@ export async function POST() {
     let created = 0;
     let updated = 0;
 
-    for (const memberData of leapday2025Members) {
+    for (const memberData of IBK7_MEMBERS_2025) {
       // Check if member already exists
       const { data: existing } = await sb
         .from("leapday_members_2025")
